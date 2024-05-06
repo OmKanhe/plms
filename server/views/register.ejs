@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Registration</title>
+</head>
+<body>
+    <h1>Lab Registration Form</h1>
+    <form action="/signup" method="POST">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br>
+        <label for="contact_no">Contact Number:</label>
+        <input type="text" id="contact_no" name="contact_no" required><br>
+        <label for="lab_name">Lab Name:</label>
+        <input type="text" id="lab_name" name="lab_name" required><br>
+        <label for="lab_license">Lab License:</label>
+        <input type="text" id="lab_license" name="lab_license" required><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

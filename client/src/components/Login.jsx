@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/no-unescaped-entities */
+import  { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/landing-apge-logo.png";
 import login from "../assets/login.png";
+import {useDispatch} from "react-redux"
+import { loginUser } from "../store/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,6 +13,10 @@ function Login() {
   const [showPass, setShowPass] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // const {loading, error} = useSelector((state) => state.user)
+
 
   const handleClcik = () => {
     setShowPass(!showPass);
@@ -16,8 +24,26 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("submitted");
-    navigate("/dashboard");
+    let loginCredentials = {
+      email, password
+    }
+    try {
+      dispatch(loginUser(loginCredentials)).then((result) => {
+        console.log(result);
+        if(result.meta.requestStatus === "fulfilled"){
+          console.log(result.payload);
+          setEmail('')
+          setPassword('')
+          setShowPass('')
+          console.log("data set to null");
+          navigate("/dashboard")
+          // window.location.reload();
+        }
+      })
+    } catch (error) {
+      console.log("Error while logging ",error);
+    }
+   
   };
   return (
     <>
@@ -59,7 +85,7 @@ function Login() {
         </div>
         <div className="bg-gray-50 flex rounded-2xl shadow-lg max-w-5xl p-5">
           <div className="md:w-1/2 px-16">
-            <h2 className="font-bold text-2xl text-[#154c47] tracking-wide">
+            <h2 className="font-bold text-2xl text-[#007F73] tracking-wide">
               LOGIN
             </h2>
             <p className="text-sm mt-4">

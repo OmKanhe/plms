@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import image from "../assets/Personal site-amico.png";
 import logo from "../assets/landing-apge-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import Selector from "./Selector";
 import { Country, State, City } from "country-state-city";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 function CompleteProfile() {
   let countryData = Country.getAllCountries();
@@ -13,6 +14,13 @@ function CompleteProfile() {
   const [country, setCountry] = useState(countryData[0]);
   const [state, setState] = useState();
   const [city, setCity] = useState();
+  const [district, setDistrict] = useState();
+  const [pincode, setPincode] = useState();
+  const [landmark, setLandmark] = useState();
+  const [address, setAddress] = useState();
+
+  const owner = JSON.parse(localStorage.getItem("owner"));
+  // console.log("from first", owner.email);
 
   useEffect(() => {
     setStateData(State.getStatesOfCountry(country?.isoCode));
@@ -32,41 +40,70 @@ function CompleteProfile() {
 
   const navigate = useNavigate();
 
-  const handleCompleteProfile = (e) => {
+  const handleCompleteProfile = async (e) => {
     e.preventDefault();
-    console.log("profile completed");
-    navigate("/dashboard");
+    let profileData = {
+      email: owner.email,
+      address,
+      landmark,
+      city: city.name,
+      district,
+      state: state.name,
+      country: country.name,
+      pincode,
+    };
+    try {
+      const response = await axios.post("/lab_profile", profileData);
+      const data = response.data;
+      console.log(data);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        toast.success("Lab profile created successfully");
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.log("Error ", error);
+    }
+    console.log(profileData);
   };
 
   return (
     <>
-      <div className="sm:block hidden">
-        <div
-          className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
-          style={{ top: "10%", left: "50%" }}
-        ></div>
-        <div
-          className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
-          style={{ top: "5%", left: "2%" }}
-        ></div>
-        <div
-          className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
-          style={{ top: "-5%", left: "85%" }}
-        ></div>
-        <div
-          className="absolute w-24 h-24 rounded-full bg-green-500 blur-3xl -z-50"
-          style={{ top: "75%", left: "12%" }}
-        ></div>
+    {!owner ? (
+    <div className="sm:min-h-screen bg-[#337357] text-white">
+    <h1 className="text-4xl font-bold text-center pt-96">Please register your lab first</h1>
+    </div>
+  ) : 
+      <div>
+        <div className="sm:block hidden">
+          <div
+            className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
+            style={{ top: "10%", left: "50%" }}
+          ></div>
+          <div
+            className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
+            style={{ top: "5%", left: "2%" }}
+          ></div>
+          <div
+            className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
+            style={{ top: "-5%", left: "85%" }}
+          ></div>
+          <div
+            className="absolute w-24 h-24 rounded-full bg-green-500 blur-3xl -z-50"
+            style={{ top: "75%", left: "12%" }}
+          ></div>
 
-        <div
-          className="absolute w-24 h-24 rounded-full bg-green-500 blur-3xl -z-50 "
-          style={{ top: "85%", left: "65%" }}
-        ></div>
-        <div
-          className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
-          style={{ bottom: "40%", right: "1%" }}
-        ></div>
-      </div>
+          <div
+            className="absolute w-24 h-24 rounded-full bg-green-500 blur-3xl -z-50 "
+            style={{ top: "85%", left: "65%" }}
+          ></div>
+          <div
+            className="absolute w-20 h-20 rounded-full bg-green-500 blur-3xl -z-50"
+            style={{ bottom: "40%", right: "1%" }}
+          ></div>
+        </div>
+
 
       <section className="sm:min-h-screen flex flex-col items-center">
         <img
@@ -79,16 +116,20 @@ function CompleteProfile() {
         <div className="sm:min-w-screen sm:min-h-4 sm:h-1 bg-[FEFBF6]  sm:mb-12 flex justify-center align-middle"></div>
         {/* <!-- login container --> */}
 
-        <h2 className="font-bold text-3xl text-[#007F73] sm:grid-cols-none">
-          Welcome Lab Name
+        <h2 className="font-semibold text-3xl text-[#007F73] sm:grid-cols-none">
+          Welcome, <span className="text-3xl font-bold">{owner.lab_name}</span>
         </h2>
-        <p className="text-base mt-4 text-[#193f2e] sm:grid-cols-none">
+        <p className="text-lg font-medium mt-4 text-[#114232] sm:grid-cols-none">
           License Number :{" "}
-          <span className="text-[#007F73] font-bold">L345CDC9</span>
+          <span className="text-[#007F73] font-bold">{owner.lab_license}</span>
         </p>
-        <p className="text-s mt-1 text-[#193f2e] sm:grid-cols-none">
+        <p className=" mt-8 text-s text-[#193f2e] text-center sm:grid-cols-none">
           Please complete your profile, you can change details later in settings
-          page.
+          page. <br />
+          <span className="text-sm">
+            All fields are mandatory{" "}
+            <span className="text-lg mt-3 text-red-600">*</span>
+          </span>
         </p>
         <div className="bg-slate-50 rounded-2xl shadow-lg sm:mt-14 sm:p-5 sm:px-8 items-center">
           {/* LABORATORY DETIALS */}
@@ -103,13 +144,12 @@ function CompleteProfile() {
             <div className="">
               <p className="text-slate-700 sm:ml-1 font-semibold">Lab Name</p>
               <input
-                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border font-normal text-gray-500"
                 type="text"
                 name="email"
                 placeholder="Lab Name"
                 disabled
-                // value={values.labName}
-                // onChange={(e) => setValues({...values, labName : e.target.value})}
+                value={owner.lab_name}
               />
             </div>
 
@@ -118,13 +158,12 @@ function CompleteProfile() {
                 License Number
               </p>
               <input
-                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border font-normal text-gray-500"
                 type="text"
                 name="email"
                 placeholder="CF34GBJC8"
                 disabled
-                // value={values.labName}
-                // onChange={(e) => setValues({...values, labName : e.target.value})}
+                value={owner.lab_license}
               />
             </div>
             {/* <!-- form --> */}
@@ -141,12 +180,12 @@ function CompleteProfile() {
             <div className="">
               <p className="text-slate-700 sm:ml-1 font-semibold">Owner Name</p>
               <input
-                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  font-normal text-gray-500"
                 type="text"
                 name="email"
                 placeholder="Owner Name"
                 disabled
-                // value={values.labName}
+                value={owner.fullname}
                 // onChange={(e) => setValues({...values, labName : e.target.value})}
               />
             </div>
@@ -156,12 +195,12 @@ function CompleteProfile() {
                 Owner Contact No.
               </p>
               <input
-                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border font-normal text-gray-500"
                 type="text"
                 name="email"
                 placeholder="9876753944"
                 disabled
-                // value={values.labName}
+                value={owner.contact_no}
                 // onChange={(e) => setValues({...values, labName : e.target.value})}
               />
             </div>
@@ -171,12 +210,12 @@ function CompleteProfile() {
                 Owner email address
               </p>
               <input
-                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border font-normal text-gray-500"
                 type="text"
                 name="email"
                 placeholder="o@example.com"
                 disabled
-                // value={values.labName}
+                value={owner.email}
                 // onChange={(e) => setValues({...values, labName : e.target.value})}
               />
             </div>
@@ -230,8 +269,8 @@ function CompleteProfile() {
                 type="text"
                 name="district"
                 placeholder="District Name"
-                // value={values.labName}
-                // onChange={(e) => setValues({...values, labName : e.target.value})}
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
               />
             </div>
 
@@ -240,10 +279,34 @@ function CompleteProfile() {
               <input
                 className="sm:p-2  sm:pl-4 sm:mt-8 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
                 type="text"
-                name="pimcode"
+                name="pincode"
                 placeholder="Pincode"
-                // value={values.labName}
-                // onChange={(e) => setValues({...values, labName : e.target.value})}
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+              />
+            </div>
+
+            <div className="sm:mt-16 ">
+              <p className="text-slate-700 sm:ml-1 font-semibold">Landmark :</p>
+              <input
+                className="sm:p-2  sm:pl-4 sm:mt-8 sm:rounded-xl border  placeholder:font-normal placeholder:text-gray-500"
+                type="text"
+                name="landmark"
+                placeholder="Landmark"
+                value={landmark}
+                onChange={(e) => setLandmark(e.target.value)}
+              />
+            </div>
+
+            <div className="sm:mt-16">
+              <p className="text-slate-700 sm:ml-1 font-semibold">Address :</p>
+              <input
+                className="sm:p-2  sm:pl-3 sm:pr-[150px] sm:mt-4 sm:rounded-xl border font-normal text-gray-500"
+                type="textarea"
+                name="address"
+                placeholder="Your address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
@@ -259,6 +322,8 @@ function CompleteProfile() {
           </form>
         </div>
       </section>
+      </div>
+        }
     </>
   );
 }
