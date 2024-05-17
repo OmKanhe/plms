@@ -11,7 +11,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="navbar bg-[#337357] text-white sm:h-[100px]">
+      <div className="navbar bg-[#337357] text-white sm:h-[100px] z-30">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -37,28 +37,28 @@ function Navbar() {
       <li>
         <details>
           <summary>Patients</summary>
-        <ul className="p-2">
-            <li className="mb-3 sm:w-[140px]"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold">Add Patient</a></li>
-            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold" >Manage Patients</a></li>
+        <ul className="p-2 z-30">
+            <li className="mb-3 sm:w-[140px]"><Link to="/add-patient" className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20">Add Patient</Link></li>
+            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20" >Manage Patients</a></li>
           </ul>
         </details>
       </li>
       <li>
         <details>
           <summary>Reports</summary>
-          <ul className="p-2">
-          <li className="mb-3 sm:w-[160px]"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold"><Link to='/upload-report'>Upload Report</Link></a></li>
-            <li className="mb-3"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold" >Export Report</a></li>
-            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold" >Lab Revenue Report</a></li>
+          <ul className="p-2 z-30 ">
+          <li className="mb-3 sm:w-[160px]"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20"><Link to='/upload-report'>Upload Report</Link></a></li>
+            <li className="mb-3"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20" >Export Report</a></li>
+            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20" >Lab Revenue Report</a></li>
           </ul>
         </details>
       </li>
       <li>
         <details>
           <summary>Settings</summary>
-          <ul className="p-2">
-          <li className="mb-3 sm:w-[140px]"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold">Change Profile</a></li>
-            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold" >Delete Account</a></li>
+          <ul className="p-2 z-30">
+          <li className="mb-3 sm:w-[140px]"><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20">Change Profile</a></li>
+            <li><a className="bg-[#337357] hover:bg-[#112d20] hover:font-semibold z-20" >Delete Account</a></li>
           </ul>
         </details>
       </li>

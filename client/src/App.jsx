@@ -10,6 +10,7 @@ import ContactUs from './pages/ContactUs'
 import axios from 'axios'
 import {Toaster} from "react-hot-toast"
 import Footer from './components/Footer'
+import AddPatient from './pages/AddPatient'
 // import ManagePatients from './pages/ManagePatients'
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
      <Route path='/dashboard' element = {<Dashboard/>} />
      <Route path='/upload-report' element = {<UploadExportReport/>}/>
      <Route path='/contact-us' element = {<ContactUs/>}/>
+     <Route path='/add-patient' element= {<AddPatient/>} />
      {/* <Route path='/manage-patient' element= {<ManagePatients/>} /> */}
 
   

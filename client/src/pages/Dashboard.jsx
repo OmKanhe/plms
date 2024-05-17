@@ -137,17 +137,17 @@ function Dashboard() {
 
   return (
     <>
-    <div className="bg-[#F2F1EB]">
+    <div className="bg-white mb-5">
       <Navbar />
-      <div className="flex justify-center items-center flex-col h-screen mt-[120px] bg-[#F2F1EB]">
-        <div className=""> 
+      <div className="flex justify-center items-center flex-col h-screen mt-[120px] bg-white">
+        <div className="mt-12"> 
           <p className="text-3xl font-bold align  text-[#007F73] sticky">Patient Information Dashboard</p>
         </div>
-        <div className="mt-14">
+        <div className="mt-12">
       <Table
       bordered
       virtual scroll={{ x: 2000, y: 1000 }}
-        style={{maxWidth: 1400}}
+        style={{maxWidth: 1400, marginBottom:120}}
         loading={loading}
         columns={columns}
         dataSource={dataSource}
